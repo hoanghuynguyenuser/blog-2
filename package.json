@@ -1,18 +1,43 @@
 {
   "name": "blog_myself",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon --inspect index.js",
+    "beautiful": "lint-staged",
+    "watch": "node-sass --watch src/resources/scss/app.scss src/public/css/app.css",
+    "start": "nodemon --inspect src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "huy nguyen",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-handlebars": "^6.0.1",
+    "mongoose": "^6.0.13"
+  },
+  "lint-staged": {
+    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
-  }
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.2",
+    "morgan": "^1.10.0",
+    "node-sass": "^6.0.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nghhuy256/blog_myself.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nghhuy256/blog_myself/issues"
+  },
+  "homepage": "https://github.com/nghhuy256/blog_myself#readme",
+  "description": ""
 }
