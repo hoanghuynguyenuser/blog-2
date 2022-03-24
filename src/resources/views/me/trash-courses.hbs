@@ -2,8 +2,8 @@
 
     <div>
 
-      <h3>My List Courses</h3>
-      <a href="/me/trash/courses">Bin</a>
+      <a href="/me/stored/courses">Your courses list</a>
+      <h3>Deleted Courses</h3>
     </div>
     <table class="table m-4">
         <thead>
@@ -21,16 +21,16 @@
                     <td>{{this.name}}</td>
                     <td>{{this.createdAt}}</td>
                     <td>
-                        <a href="/courses/{{this._id}}/edit" class="btn btn-link">Edit</a>
-                        <a href="" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-course-modal" class="btn btn-link">Delete</a>
+                        <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}" >Restore</a>
+                        <a href="" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-course-modal" class="btn btn-link">Permanently Deleted</a>
                     </td>
                 </tr>
 
             {{else}} 
               <tr>
                 <td colspan="5" class="text-center">
-                  You have not posted any courses yet.
-                  <a href="/courses/create">Create course</a>
+                  Empty Bin
+                  <a href="/me/stored/courses">Your course list</a>
                 </td>
               </tr>
             {{/each}}
@@ -44,32 +44,33 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Delete course!!!</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Delete course permanently!!!</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Are you sure?
+        This action cannot be undone
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button id="btn-delete-course" type="button" class="btn btn-danger">Delete</button>
+        <button id="btn-delete-course" type="button" class="btn btn-danger">Yes</button>
       </div>
     </div>
   </div>
 </div>
 
 
-{{!-- Delete hiden form --}}
  <form name="delete-course-form" method="POST" action=""></form>
+ <form name="restore-course-form" method="POST" action=""></form>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var courseId;
         var deleteForm = document.forms['delete-course-form']   
+        var restoreForm = document.forms['restore-course-form']   
         var btnDeleteCourse = document.getElementById('btn-delete-course')
-
+        var restoreBtn = $('.btn-restore')
 
 
         // WHen dialog confirm clicked
@@ -80,9 +81,17 @@
 
         //When delete course btn clicked
         btnDeleteCourse.onclick = function() {
-            deleteForm.action = '/courses/' + courseId + '?_method=DELETE';
+            deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE';
             deleteForm.submit()
         }
+
+        //Restore btn cliced
+        restoreBtn.click(function (e) {
+          e.preventDefault()
+          var courseId = $(this).data('id')
+          restoreForm.action = '/courses/' + courseId + '/restore?_method=PATCH';
+          restoreForm.submit()
+        })
     })
 
 
